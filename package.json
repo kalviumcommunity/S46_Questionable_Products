@@ -1,0 +1,18 @@
+{
+  "name": "s46_questionable_products",
+  "version": "1.0.0",
+  "description": "This will be a comprehensive list of wierdest products and appliances that are present. These are products that solve no real problems or create even more problems. From insance products, fashion products, kitchen appliances, and unusual gadgets.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.6.7",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
+  }
+}
