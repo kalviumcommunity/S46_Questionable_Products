@@ -1,0 +1,18 @@
+meta {
+  name: Update Product
+  type: http
+  seq: 7
+}
+
+patch {
+  url: http://localhost:3000/user/products/65c61359301e830c53ec500e
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "category": "Toys",
+    "description": "This product doesn't seem that wierd"
+  }
+}

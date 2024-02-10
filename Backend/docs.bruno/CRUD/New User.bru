@@ -1,0 +1,20 @@
+meta {
+  name: adding new user and product
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:3000/user/users
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name":"Melvin",
+    "userID":4,
+    "email":"example@gmail.com",
+    "password":"examplePassword"
+  }
+}

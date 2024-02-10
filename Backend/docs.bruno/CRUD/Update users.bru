@@ -1,0 +1,17 @@
+meta {
+  name: Update users
+  type: http
+  seq: 6
+}
+
+patch {
+  url: http://localhost:3000/user/users/65c5fe4f49ff9bdae0952f0d
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name":"Melvin Kannan"
+  }
+}
