@@ -13,7 +13,7 @@ function Signup() {
             <div className='form'>
             <h2>Explore mind boggling products</h2>
             <input className='username' type="text" placeholder='username/email' />
-            <input className='password' type="text" placeholder='password' />
+            <input className='password' type="password" placeholder='password' />
             <button className='signup'>Sign Up</button>
             </div>
         </div>
