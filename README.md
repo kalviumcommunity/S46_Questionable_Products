@@ -1,6 +1,7 @@
 ## Questionable Products
 
-**RENDER LINK**: https://questionable-products.onrender.com
+**Render (Back-end)**: https://questionable-products.onrender.com 
+**Netlify (Front-end)**: https://questionable-products.netlify.app
 
 ### Overview
 
