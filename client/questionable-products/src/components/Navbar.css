@@ -1,0 +1,53 @@
+.navbar{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around; 
+    padding: 10px 7%;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+ul{
+    flex: 1;
+    list-style: none;
+    text-align: center;
+    
+}
+ul li{
+    display: inline-block;
+    margin: 10px 20px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.search-box{
+    display: flex;
+    align-items: center;
+}
+.search-box img{
+    width: 20px;
+    cursor: pointer;
+}
+.search-box .input{
+    width: 35vw;
+    border: none;
+    border-bottom: 2px solid #D1D1D4;
+    background: none;
+}
+
+.signUp {
+    background-image: linear-gradient(to right, #385a64 0%, #70b2c6 50%, #46717e  100%);
+    padding: 10px 35px;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;            
+    box-shadow: 0 0 20px #eee;
+    border-radius: 10px;
+    display: block;
+}
+
+.signUp:hover {
+    background-position: right center;
+    text-decoration: none;
+}

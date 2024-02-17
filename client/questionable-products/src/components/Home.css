@@ -1,0 +1,27 @@
+.posts-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 50px;
+}
+.posts{
+    width: 35vw;
+    background-image: linear-gradient(to right, #385a64 0%, #70b2c6 50%, #46717e  100%);
+    margin: 40px 0px;
+    padding: 15px 45px;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;            
+    box-shadow: 0 0 20px #eee;
+    border-radius: 10px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+.posts:hover{    
+    background-position: right center;
+    text-decoration: none;
+}

@@ -1,0 +1,93 @@
+.card {
+    width: 35vw;
+    min-height: 50vh;
+    background: white;
+    padding: .4em;
+    border-radius: 6px;
+    background: linear-gradient(1450deg, #f0f0f0, #ffffff);
+    box-shadow:  20px 20px 40px #bebebe,
+                 -20px -20px 40px #ffffff;
+    margin-bottom: 2.5em;
+}
+  
+  .card-image img{
+    width: 100%;
+    height: 40vh;
+    border-radius: 6px 6px 0 0;
+  }
+  
+
+  .heading {
+    font-weight: 600;
+    color: rgb(88, 87, 87);
+    padding: 7px;
+  }
+  
+  .heading:hover {
+    cursor: pointer;
+  }
+  
+  .description {
+    color: gray;
+    font-weight: 400;
+    font-size: 0.9em;
+    padding-top: 20px;
+  }
+  
+  .upvote{
+    background-image: linear-gradient(to right, #385a64 0%, #70b2c6 50%, #46717e  100%);
+    padding: 10px 35px;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;            
+    box-shadow: 0 0 20px #eee;
+    border-radius: 10px;
+    display: block;
+    margin-top: 15px;
+  }
+
+  .upvote:hover{
+    background-position: right center;
+    text-decoration: none;
+
+  }
+  .update{
+    background-image: linear-gradient(to right, #ff735c 0%, #ffb3a7 50%, #ff8f7e  100%);
+    padding: 10px 35px;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;            
+    box-shadow: 0 0 20px #eee;
+    border-radius: 10px;
+    display: block;
+    margin-top: 15px;
+
+  }
+  .update:hover{
+    background-position: right center;
+    text-decoration: none;
+  }
+  .delete{
+    background-image: linear-gradient(to right, #ff1e1e 0%, #ff7f6b 50%, #ff4326  100%);
+    padding: 10px 35px;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;            
+    box-shadow: 0 0 20px #eee;
+    border-radius: 10px;
+    display: block;
+    margin-top: 15px;
+
+  }
+  
+  .delete:hover{
+    background-position: right center;
+    text-decoration: none;
+  }
+  .buttons{
+    display: flex;
+    justify-content: space-between;
+  }
