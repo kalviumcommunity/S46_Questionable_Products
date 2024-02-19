@@ -1,29 +1,28 @@
 import React from 'react'
 import './Post.css'
+import imgg from '../assets/key_flw.jpg'
 
-function Post({image, title, category, description, votes}) {
+function Post() {
   return (
     <div>
     <div class="card">
-      
-    <div class="heading">
-      {title}     
-    </div>
+        
     <div class="card-image">
 
-        <img src={image} alt="" />
+        <img src={imgg} alt="" />
     </div>
+    <div class="heading"> Guys, I think this product has a key flaw
 
     <div className='description'>
-      {description}
+    Imagine opening a door with this key! How will you even hold it after inserting the key in keyhole?
    </div>
-   <div className='category'>Category: {category}</div>
-   <h1>{votes}</h1>
+   <h1>40</h1>
 
 <   div className='buttons'>
     <button className='upvote'>UPVOTE</button>
     <button className="update">UPDATE</button>
     <button className="delete">DELETE</button>
+    </div>
     </div>
     </div>
     </div>
