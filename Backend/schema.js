@@ -1,12 +1,12 @@
 const mongoose = require('mongoose')
 
 const productSchema = new mongoose.Schema({
-    name: {
+    title: {
         type: String,
         required: true
     },
-    productID: {
-        type: Number,
+    image: {
+        type: String,
     },
     description: {
         type: String,
@@ -14,21 +14,19 @@ const productSchema = new mongoose.Schema({
     category: {
         type: String,
     },
+    votes:{
+        type: Number,
+    }
 })
 
 const userSchema = new mongoose.Schema({
-    userID: {
-        type: Number
-    },
-    name: {
-        type: String,
-        required: true
-    },
     email: {
-        type: String,
+        type: String,        
+        required: true
     },
     password: {
         type: String,
+        required: true
     }
 })
 const User = mongoose.model('users', userSchema)
