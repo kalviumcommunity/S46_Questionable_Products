@@ -10,13 +10,13 @@ function Home() {
   const [isLoading, setLoading] = useState(true)
 
   useEffect(()=>{
-    axios.get("http://localhost:3000/products")
+    axios.get(process.env.BACKEND_URL)
     .then(data=>{
       setData(data.data)
       console.log(data.data)
       setTimeout(() => {
         setLoading(false)
-      }, 1000);
+      }, 500);
     })
 
   },[])
