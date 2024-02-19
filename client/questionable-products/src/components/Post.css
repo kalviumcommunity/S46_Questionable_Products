@@ -1,13 +1,14 @@
 .card {
     width: 35vw;
-    min-height: 50vh;
+    min-height: 51vh;
     background: white;
     padding: .4em;
-    border-radius: 6px;
+    border-radius: 7px;
     background: linear-gradient(1450deg, #f0f0f0, #ffffff);
     box-shadow:  20px 20px 40px #bebebe,
                  -20px -20px 40px #ffffff;
     margin-bottom: 2.5em;
+    border: 2px solid rgb(209, 209, 209);
 }
   
   .card-image img{
@@ -19,6 +20,7 @@
 
   .heading {
     font-weight: 600;
+    font-size: 1.5em;
     color: rgb(88, 87, 87);
     padding: 7px;
   }
@@ -30,8 +32,14 @@
   .description {
     color: gray;
     font-weight: 400;
-    font-size: 0.9em;
+    font-size: 1em;
     padding-top: 20px;
+  }
+  .category{
+    font-weight: 400;
+    font-size: 0.8em;
+    padding-top: 10px;
+
   }
   
   .upvote{
