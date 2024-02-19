@@ -10,7 +10,7 @@ function Home() {
   const [isLoading, setLoading] = useState(true)
 
   useEffect(()=>{
-    axios.get(process.env.BACKEND_URL)
+    axios.get("https://questionable-products.onrender.com/products")
     .then(data=>{
       setData(data.data)
       console.log(data.data)
