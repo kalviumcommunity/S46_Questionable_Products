@@ -8,8 +8,6 @@ const { User, Product } = require('./schema');
 
 router.post('/users', async (req, res) => {
     const user = new User({
-        name: req.body.name,
-        userID: req.body.userID,
         email: req.body.email,
         password: req.body.password
     });
@@ -24,10 +22,11 @@ router.post('/users', async (req, res) => {
 
 router.post('/products', async (req, res) => {
     const product = new Product({
-        name: req.body.name,
-        productID: req.body.productID,
+        title: req.body.title,
+        image: req.body.image,
         description: req.body.description,
-        category: req.body.category
+        category: req.body.category,
+        votes: req.body.votes,
     });
 
     try {
@@ -44,7 +43,7 @@ router.post('/products', async (req, res) => {
 
 // getting a user and product (R)
 
-router.get('/getuser', async (req, res) => {
+router.get('/user', async (req, res) => {
     try {
         const users = await User.find();
         res.json(users);
@@ -73,9 +72,6 @@ router.patch('/users/:id', async (req, res) => {
         if (user == null) {
             return res.status(404).json({ message: 'User not found' });
         }
-        if (req.body.name != null) {
-            user.name = req.body.name;
-        }
         if (req.body.email != null) {
             user.email = req.body.email;
         }
@@ -98,14 +94,20 @@ router.patch('/products/:id', async (req, res) => {
         if (product == null) {
             return res.status(404).json({ message: 'Product not found' });
         }
-        if (req.body.name != null) {
-            product.name = req.body.name;
+        if (req.body.image != null) {
+            product.image = req.body.image;
+        }
+        if (req.body.title != null) {
+            product.title = req.body.title;
         }
         if (req.body.description != null) {
             product.description = req.body.description;
         }
         if (req.body.category != null) {
             product.category = req.body.category;
+        }
+        if (req.body.votes != null) {
+            product.votes = req.body.votes;
         }
 
         const updatedProduct = await product.save();
