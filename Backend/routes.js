@@ -61,6 +61,24 @@ router.get('/products', async (req, res) => {
     }
 });
 
+// get users & products by ID
+router.get("/users/:id", (req, res) => {
+    const id = req.params.id;
+    User
+      .findById(id)
+      .then((data) => res.json(data))
+      .catch((err) => res.json(err));
+  });
+
+
+router.get("/products/:id", (req, res) => {
+    const id = req.params.id;
+    Product
+      .findById(id)
+      .then((data) => res.json(data))
+      .catch((err) => res.json(err));
+  });
+
 
 
 
@@ -87,35 +105,28 @@ router.patch('/users/:id', async (req, res) => {
     }
 });
 
+router.put('/products/:id', async (req, res) => {
+    const id = req.params.id;
 
-router.patch('/products/:id', async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id);
-        if (product == null) {
+        const product = await Product.findByIdAndUpdate({_id: id}, {
+            image: req.body.image || undefined,
+            title: req.body.title || undefined,
+            description: req.body.description || undefined,
+            category: req.body.category || undefined,
+            votes: req.body.votes || undefined,
+        }, { new: true });
+
+        if (!product) {
             return res.status(404).json({ message: 'Product not found' });
         }
-        if (req.body.image != null) {
-            product.image = req.body.image;
-        }
-        if (req.body.title != null) {
-            product.title = req.body.title;
-        }
-        if (req.body.description != null) {
-            product.description = req.body.description;
-        }
-        if (req.body.category != null) {
-            product.category = req.body.category;
-        }
-        if (req.body.votes != null) {
-            product.votes = req.body.votes;
-        }
 
-        const updatedProduct = await product.save();
-        res.json(updatedProduct);
+        res.json(product);
     } catch (err) {
         res.status(400).json({ message: err.message });
     }
 });
+
 
 
 
