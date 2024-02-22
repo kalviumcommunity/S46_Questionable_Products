@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import './Home.css';
-import Navbar from './Navbar';
-import Post from './Post';
-import axios from 'axios';
-import CreateProduct from './CreateProduct';
+import React, { useEffect, useState } from "react";
+import "./Home.css";
+import Navbar from "./Navbar";
+import Post from "./Post";
+import axios from "axios";
+import CreateProduct from "./CreateProduct";
 
 function Home() {
   const [data, setData] = useState([]);
@@ -11,8 +11,9 @@ function Home() {
   const [showCreateProduct, setshowCreateProduct] = useState(false);
 
   useEffect(() => {
-    axios.get("https://questionable-products.onrender.com/products")
-      .then(data => {
+    axios
+      .get("https://questionable-products.onrender.com/products")
+      .then((data) => {
         setData(data.data);
         setLoading(false);
       });
@@ -23,12 +24,12 @@ function Home() {
   };
 
   const handleCreatePost = () => {
-
-    axios.get("https://questionable-products.onrender.com/products")
-      .then(data => {
+    axios
+      .get("https://questionable-products.onrender.com/products")
+      .then((data) => {
         setData(data.data);
       });
-    setshowCreateProduct(false); 
+    setshowCreateProduct(false);
   };
 
   const handleCloseModal = () => {
@@ -36,7 +37,7 @@ function Home() {
   };
   if (isLoading) {
     return (
-      <div className='flexx'>
+      <div className="flexx">
         <svg viewBox="25 25 50 50">
           <circle r="20" cy="50" cx="50"></circle>
         </svg>
@@ -48,13 +49,20 @@ function Home() {
     <div>
       <Navbar />
 
-      <button className='posts' onClick={handleCreatePostClick}>Create Post</button>
+      <button className="posts" onClick={handleCreatePostClick}>
+        Create Post
+      </button>
 
-      <div className='posts-container'>
-        {data && data.map(post => <Post {...post} key={post.id}/>)}
+      <div className="posts-container">
+        {data && data.map((post) => <Post {...post} key={post._id} />)}
       </div>
 
-      {showCreateProduct && <CreateProduct onCreatePost={handleCreatePost} onClose={handleCloseModal} />}
+      {showCreateProduct && (
+        <CreateProduct
+          onCreatePost={handleCreatePost}
+          onClose={handleCloseModal}
+        />
+      )}
     </div>
   );
 }

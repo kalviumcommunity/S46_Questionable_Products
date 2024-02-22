@@ -16,6 +16,7 @@ function CreateProduct({ onCreatePost, onClose }) {
         image,
         description,
         category,
+        votes: 0,
       });
       console.log(response.data);
       onCreatePost(); 
@@ -76,7 +77,7 @@ function CreateProduct({ onCreatePost, onClose }) {
 		</div>
 
 		<div class="modal__footer">
-			<button class="create" onClick={handleSubmit}>Create project</button>
+			<button class="create" onClick={handleSubmit}>Create product</button>
 		</div>
         </div>
       </div>

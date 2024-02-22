@@ -1,33 +1,67 @@
-import React from 'react'
-import './Post.css'
+import React, { useState } from "react";
+import "./Post.css";
+import { Link } from "react-router-dom";
+import axios from "axios";
 
-function Post({image, title, category, description, votes}) {
+
+function Post({ image, title, category, description, votes, _id }) {
+
+  const [localVotes, setLocalVotes] = useState(votes);
+
+  const handleDelete = (id) => {
+    axios
+      .delete(`https://questionable-products.onrender.com/products/${id}`)
+      .then((res) => {
+        console.log(res.data);
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const handleUpdate = (id) => {
+    setLocalVotes((prevVotes) => prevVotes + 1);
+
+    axios
+      .put(`https://questionable-products.onrender.com/products/${id}`, {
+        votes: localVotes + 1, 
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLocalVotes((prevVotes) => prevVotes - 1);
+      });
+  };
+
   return (
     <div>
-    <div class="card">
-      
-    <div class="heading">
-      {title}     
-    </div>
-    <div class="card-image">
+      <div className="card">
+        <div className="heading">{title}</div>
+        <div className="card-image">
+          <img src={image} alt="" />
+        </div>
 
-        <img src={image} alt="" />
-    </div>
+        <div className="description">{description}</div>
+        <div className="category">Category: {category}</div>
+        <h1>{localVotes ? localVotes: 0}</h1>
 
-    <div className='description'>
-      {description}
-   </div>
-   <div className='category'>Category: {category}</div>
-   <h1>{votes}</h1>
+        <div className="buttons">
+          <button className="upvote" onClick={(e) => handleUpdate(_id)}>
+            UPVOTE
+          </button>
 
-<   div className='buttons'>
-    <button className='upvote'>UPVOTE</button>
-    <button className="update">UPDATE</button>
-    <button className="delete">DELETE</button>
+          <Link to={`/products/${_id}`}>
+            <button className="update">UPDATE</button>
+          </Link>
+          <button className="delete" onClick={(e) => handleDelete(_id)}>
+            DELETE
+          </button>
+        </div>
+      </div>
     </div>
-    </div>
-    </div>
-  )
+  );
 }
 
-export default Post
+export default Post;
