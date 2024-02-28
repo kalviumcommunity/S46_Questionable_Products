@@ -34,11 +34,14 @@
   font-style: normal;
   font-variation-settings: "wdth" 100;
 }
-.form {
+form {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   padding-bottom: 5em;
+  
 }
+
 .username,
 .password {
   border: none;
@@ -64,7 +67,11 @@ input:hover {
     #70b2c6 50%,
     #46717e 100%
   );
-  margin: 10px;
+  margin-top: 2em;
+  margin-bottom: 1em;
+  font-family: "Raleway", sans-serif;
+  font-weight: 650;
+  font-size: 1em;
   padding: 15px 45px;
   text-transform: uppercase;
   transition: 0.5s;
@@ -81,5 +88,6 @@ input:hover {
 }
 .username,
 .password {
-  margin: 2em;
+  margin-top: 2em;
+
 }

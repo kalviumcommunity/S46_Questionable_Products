@@ -8,6 +8,7 @@
   box-shadow: 20px 20px 40px #bebebe, -20px -20px 40px #ffffff;
   margin-bottom: 2.5em;
   border: 2px solid rgb(209, 209, 209);
+
 }
 
 .card-image img {
@@ -106,5 +107,8 @@
 }
 .buttons {
   display: flex;
-  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
 }

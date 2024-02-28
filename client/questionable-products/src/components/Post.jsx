@@ -3,36 +3,28 @@ import "./Post.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-
-function Post({ image, title, category, description, votes, _id }) {
-
+function Post({ image, title, category, description, votes, _id, onDelete, updateVotes}) {
   const [localVotes, setLocalVotes] = useState(votes);
 
-  const handleDelete = (id) => {
-    axios
-      .delete(`https://questionable-products.onrender.com/products/${id}`)
-      .then((res) => {
-        console.log(res.data);
-        window.location.reload();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  const handleDelete = () => {
+    onDelete(_id);
   };
+
   const handleUpdate = (id) => {
     setLocalVotes((prevVotes) => prevVotes + 1);
 
     axios
       .put(`https://questionable-products.onrender.com/products/${id}`, {
-        votes: localVotes + 1, 
+        votes: localVotes + 1,
       })
       .then((res) => {
-        console.log(res.data);
+        updateVotes(_id)
       })
       .catch((err) => {
         console.log(err);
         setLocalVotes((prevVotes) => prevVotes - 1);
       });
+
   };
 
   return (
@@ -45,7 +37,7 @@ function Post({ image, title, category, description, votes, _id }) {
 
         <div className="description">{description}</div>
         <div className="category">Category: {category}</div>
-        <h1>{localVotes ? localVotes: 0}</h1>
+        <h1>{localVotes ? localVotes : 0}</h1>
 
         <div className="buttons">
           <button className="upvote" onClick={(e) => handleUpdate(_id)}>
@@ -55,7 +47,7 @@ function Post({ image, title, category, description, votes, _id }) {
           <Link to={`/products/${_id}`}>
             <button className="update">UPDATE</button>
           </Link>
-          <button className="delete" onClick={(e) => handleDelete(_id)}>
+          <button className="delete" onClick={handleDelete}>
             DELETE
           </button>
         </div>
