@@ -14,7 +14,7 @@ function Post({ image, title, category, description, votes, _id, onDelete, updat
     setLocalVotes((prevVotes) => prevVotes + 1);
 
     axios
-      .put(`https://questionable-products.onrender.com/products/${id}`, {
+      .put(import.meta.env.VITE_API_URL + "/products/"+ id, {
         votes: localVotes + 1,
       })
       .then((res) => {

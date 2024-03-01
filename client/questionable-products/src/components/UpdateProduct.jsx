@@ -18,7 +18,7 @@ function UpdateProduct() {
   
   useEffect(() => {
     axios
-      .get(`https://questionable-products.onrender.com/products/${id}`)
+      .get(import.meta.env.VITE_API_URL + "/products/"+ id)
       .then((data) => {
         setTitle(data.data.title);
         setImage(data.data.image);
@@ -34,7 +34,7 @@ function UpdateProduct() {
   const handleUpdate = async (e) => {
     e.preventDefault();
     axios
-      .put("https://questionable-products.onrender.com/products/" + id, {
+      .put(import.meta.env.VITE_API_URL + "/products/"+ id, {
         title,
         image,
         description,

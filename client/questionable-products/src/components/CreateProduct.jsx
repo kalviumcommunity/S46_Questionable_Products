@@ -13,7 +13,7 @@ function CreateProduct({ onCreatePost, onClose }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("https://questionable-products.onrender.com/products", {
+      const response = await axios.post(import.meta.env.VITE_API_URL + "/products", {
         title,
         image,
         description,

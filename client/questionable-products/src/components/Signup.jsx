@@ -21,7 +21,7 @@ function Signup() {
       toast.error("Passwords do not match");
     } else {
       try {
-        const response = await axios.post("https://questionable-products.onrender.com/users", {
+        const response = await axios.post(import.meta.env.VITE_API_URL + "/users", {
           username: data.Username,
           email: data.email,
           password: data.password,

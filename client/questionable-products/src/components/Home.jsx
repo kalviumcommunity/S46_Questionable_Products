@@ -13,7 +13,7 @@ function Home() {
   const [showCreateProduct, setshowCreateProduct] = useState(false);
 
   useEffect(() => {
-    axios.get("https://questionable-products.onrender.com/products").then((data) => {
+    axios.get(import.meta.env.VITE_API_URL + "/products").then((data) => {
       setData(data.data);
       setLoading(false);
     });
@@ -24,7 +24,7 @@ function Home() {
   };
 
   const handleCreatePost = () => {
-    axios.get("https://questionable-products.onrender.com/products")
+    axios.get(import.meta.env.VITE_API_URL + "/products")
     .then((data) => {
       setData(data.data);
     })
@@ -37,7 +37,7 @@ function Home() {
 
   const handlePostDelete = (id) => {
     axios
-      .delete(`https://questionable-products.onrender.com/products/${id}`)
+      .delete(import.meta.env.VITE_API_URL + "/products/"+ id)
       .then(() => {
         toast.error("Post Deleted Successfully");
       })
