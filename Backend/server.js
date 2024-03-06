@@ -18,5 +18,5 @@ app.get("/status", (req, res) => {
 
 app.listen(port, async () => {
   await connectToDB();
-  console.log(`Example app listening on port ${port}`);
+  console.log(`Questionable Products listening on port ${port}`);
 });

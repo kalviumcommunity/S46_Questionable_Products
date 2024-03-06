@@ -93,7 +93,7 @@ function CreateProduct({ onCreatePost, onClose }) {
           </div>
 
           <div className="modal__footer">
-            <button className="create" onClick={handleSubmit}>
+            <button className="button create" onClick={handleSubmit}>
               Create product
             </button>
           </div>

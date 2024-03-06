@@ -18,7 +18,9 @@ form {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   padding-bottom: 3em;
+  
   width: 100%;
 }
 
@@ -45,7 +47,7 @@ input:hover {
 .password {
   margin-top: 2em;
 }
-.signup {
+.login{
   margin-top: 2em;
   background: #9333ea;
   color: #fff;
@@ -53,4 +55,5 @@ input:hover {
   transition: 0.2s;
   font-family: "Raleway", sans-serif;
   font-weight: 700;
+  max-width: 10vw;
 }

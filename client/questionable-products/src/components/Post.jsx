@@ -37,17 +37,17 @@ function Post({ image, title, category, description, votes, _id, onDelete, updat
 
         <div className="description">{description}</div>
         <div className="category">Category: {category}</div>
-        <h1>{localVotes ? localVotes : 0}</h1>
+        <h1 className="votes">{localVotes ? localVotes : 0}</h1>
 
-        <div className="buttons">
-          <button className="upvote" onClick={(e) => handleUpdate(_id)}>
+        <div className="action-buttons">
+          <button className="action upvote" onClick={(e) => handleUpdate(_id)}>
             UPVOTE
           </button>
 
           <Link to={`/products/${_id}`}>
-            <button className="update">UPDATE</button>
+            <button className="button update">UPDATE</button>
           </Link>
-          <button className="delete" onClick={handleDelete}>
+          <button className="action delete" onClick={handleDelete}>
             DELETE
           </button>
         </div>

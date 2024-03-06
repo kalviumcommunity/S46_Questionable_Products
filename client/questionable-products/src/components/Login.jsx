@@ -1,14 +1,13 @@
-"use client";
-import React from "react";
-import "./Signup.css";
+import React, { useState } from "react";
+import "./Login.css";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { TypewriterEffectSmooth } from "../components/ui/typewriter-effect";
 import "react-toastify/dist/ReactToastify.css";
 import { useForm } from "react-hook-form";
-import { TypewriterEffectSmooth } from "../components/ui/typewriter-effect";
 import axios from "axios";
 
-function Signup() {
+function Login() {
   const navigate = useNavigate();
   const {
     register,
@@ -18,40 +17,44 @@ function Signup() {
   } = useForm();
 
   const handleSignup = async (data) => {
-    if (data.password !== data.confirm) {
-      toast.error("Passwords do not match");
-    } else {
-      try {
-        const response = await axios.post(
-          import.meta.env.VITE_API_URL + "/users",
-          {
-            username: data.Username,
-            email: data.email,
-            password: data.password,
-            confirmPassword: data.confirm,
-          }
-        );
-        toast.success("Signup Successful");
+    try {
+      const response = await axios.post(
+        import.meta.env.VITE_API_URL + "/login",
+        {
+          username: data.Username,
+          password: data.password,
+        }
+      );
+      toast.success("Login Successful");
+      setCookie("username", data.Username, 365);
 
-
-        setTimeout(() => {
-          navigate("/login");
-        }, 1000);
-      } catch (err) {
-        toast.error(err.response.data.message);
-      }
+      setTimeout(() => {
+        navigate("/home");
+      }, 1000);
+    } catch (err) {
+      console.log(err);
     }
+  };
+  const setCookie = (name, value, daysToExpire) => {
+    let date = new Date();
+    date.setTime(date.getTime() + daysToExpire * 24 * 60 * 60 * 1000);
+    const expires = ";expires=" + date.toUTCString();
+    const secure = ";Secure";
+    const sameSite = ";SameSite=None";
+
+    document.cookie =
+      name + "=" + value + expires + ";path=/" + secure + sameSite;
   };
   const words = [
     {
-      text: "Welcome to",
+      text: "Hey! ",
     },
     {
-      text: "Questionable",
+      text: "Welcome",
       className: "dark:text-purple-600",
     },
     {
-      text: "Products.",
+      text: "Back",
       className: "dark:text-purple-600",
     },
   ];
@@ -82,20 +85,6 @@ function Signup() {
           {errors.Username && <p>{errors.Username.message}</p>}
 
           <input
-            className="username"
-            placeholder="Email"
-            type="text"
-            {...register("email", {
-              required: "Email is required!",
-              pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
-                message: "Invalid email",
-              },
-            })}
-          />
-          {errors.email && <p>{errors.email.message}</p>}
-
-          <input
             className="password"
             type="password"
             placeholder="Password"
@@ -117,26 +106,14 @@ function Signup() {
           />
           {errors.password && <p>{errors.password.message}</p>}
 
-          <input
-            className="password"
-            type="password"
-            placeholder="Confirm Password"
-            {...register("confirm", {
-              required: "Confirm your password",
-              validate: (value) =>
-                value === watch("password") || "Passwords don't match",
-            })}
-          />
-          {errors.confirm && <p>{errors.confirm.message}</p>}
-
-          <button className="button signup" type="submit">
-            Sign Up
+          <button className=" button login" type="submit">
+            Login
           </button>
         </form>
         <p>
-          Already have an account?{" "}
-          <Link to="/login">
-            <span className="button">Log in</span>
+          New here?{" "}
+          <Link to="/signup">
+            <span className="button">Sign Up</span>
           </Link>
         </p>
       </div>
@@ -144,4 +121,4 @@ function Signup() {
   );
 }
 
-export default Signup;
+export default Login;
