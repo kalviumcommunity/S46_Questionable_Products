@@ -21,14 +21,13 @@ router.post("/users", async (req, res) => {
         return res.status(409).json({ message: "Email already exists" });
       }
 
-      const hashedPassword = await bcrypt.hash(req.body.password, 17);
+      const hashedPassword = await bcrypt.hash(req.body.password, 12);
 
 
       const user = new User({
         username: req.body.username,
         email: req.body.email,
-        password: hashedPassword,
-        confirmPassword: hashedPassword,
+        password: hashedPassword
       });
 
       const newUser = await user.save();
