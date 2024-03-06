@@ -12,7 +12,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
 }
-.buttons{
+.buttons {
   padding-top: 20px;
   display: flex;
   flex-direction: row;
@@ -21,7 +21,7 @@
   max-width: 300px;
 }
 
-.button{
+.button {
   position: relative;
   border: none;
   background: none;
@@ -30,7 +30,6 @@
   font-weight: 700;
   transition-duration: 400ms;
   transition-property: color;
-
 }
 
 .button:focus:after,
@@ -52,19 +51,18 @@
   transition-duration: 400ms;
   transition-property: width, left;
 }
-.btnone{
+.btnone {
   animation: fadeIn 2s ease-in-out;
   animation-fill-mode: forwards;
   opacity: 0;
 }
-.copyright{
+.copyright {
   position: absolute;
   bottom: 0;
   left: 50%;
   transform: translate(-50%, 0);
   color: #646464;
   font-size: 12px;
-
 }
 @keyframes fadeIn {
   from {

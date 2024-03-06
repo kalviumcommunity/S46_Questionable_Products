@@ -33,7 +33,6 @@ function Signup() {
         );
         toast.success("Signup Successful");
 
-
         setTimeout(() => {
           navigate("/login");
         }, 1000);

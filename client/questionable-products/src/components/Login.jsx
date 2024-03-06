@@ -32,7 +32,7 @@ function Login() {
         navigate("/home");
       }, 1000);
     } catch (err) {
-      console.log(err);
+      toast.error(err.response.data.message);
     }
   };
   const setCookie = (name, value, daysToExpire) => {

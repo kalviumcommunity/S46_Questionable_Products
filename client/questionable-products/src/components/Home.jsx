@@ -24,11 +24,10 @@ function Home() {
   };
 
   const handleCreatePost = () => {
-    axios.get(import.meta.env.VITE_API_URL + "/products")
-    .then((data) => {
+    axios.get(import.meta.env.VITE_API_URL + "/products").then((data) => {
       setData(data.data);
-    })
-    setshowCreateProduct(false)
+    });
+    setshowCreateProduct(false);
   };
 
   const handleCloseModal = () => {
@@ -37,7 +36,7 @@ function Home() {
 
   const handlePostDelete = (id) => {
     axios
-      .delete(import.meta.env.VITE_API_URL + "/products/"+ id)
+      .delete(import.meta.env.VITE_API_URL + "/products/" + id)
       .then(() => {
         toast.error("Post Deleted Successfully");
       })
@@ -46,13 +45,13 @@ function Home() {
       });
   };
 
- const updateVotes = () => {
-    toast.success("Vote Updated Successfully",{
+  const updateVotes = () => {
+    toast.success("Vote Updated Successfully", {
       position: "bottom-center",
       autoClose: 900,
       hideProgressBar: true,
-    })
-  }
+    });
+  };
 
   if (isLoading) {
     return (
@@ -70,12 +69,16 @@ function Home() {
       <button className="posts" onClick={handleCreatePostClick}>
         Create Post
       </button>
-      <div>
-      </div>
+      <div></div>
       <div className="posts-container">
         {data &&
           data.map((post) => (
-            <Post {...post} key={post._id} onDelete={handlePostDelete} updateVotes={updateVotes} />
+            <Post
+              {...post}
+              key={post._id}
+              onDelete={handlePostDelete}
+              updateVotes={updateVotes}
+            />
           ))}
       </div>
 
