@@ -14,14 +14,14 @@ router.post("/users", async (req, res) => {
     } else {
       const usernameExists = await User.findOne({ username: req.body.username });
       if (usernameExists) {
-        return res.status(400).json({ message: "Username already exists" });
+        return res.status(409).json({ message: "Username already exists" });
       }
       const emailExists = await User.findOne({ email: req.body.email });
       if (emailExists) {
-        return res.status(400).json({ message: "Email already exists" });
+        return res.status(409).json({ message: "Email already exists" });
       }
 
-      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+      const hashedPassword = await bcrypt.hash(req.body.password, 17);
 
 
       const user = new User({
@@ -53,10 +53,15 @@ router.post("/login", async (req, res) => {
 
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
-      return res.status(400).json({ message: "Invalid password" })
+      return res.status(401).json({ message: "Invalid password" })
     }
 
-    res.status(200).json(user);
+    const responseData = {
+      userId: user._id,
+      username: user.username
+    };
+
+    res.status(200).json(responseData);
   } catch (err) {
     res.status(500).json({ message: "Internal server error" })
   }
