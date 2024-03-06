@@ -5,14 +5,19 @@ import Signup from './components/Signup'
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import UpdateProduct from './components/UpdateProduct'
+import LandingPage from './components/LandingPage';
+import Login from './components/Login';
+
 
 function App() {
 
   return (
     <>
-    <ToastContainer />
+    <ToastContainer theme="dark" />
     <Routes>
-      <Route path='/' element= {<Home />} ></Route>
+      <Route path='/' element= {<LandingPage />} ></Route>
+      <Route path='/login' element= {<Login />} ></Route>
+      <Route path='/home' element= {<Home />} ></Route>
       <Route path='/signup' element= {<Signup/>} ></Route> 
       <Route path='/products/:id' element= {<UpdateProduct />} ></Route>
     </Routes>

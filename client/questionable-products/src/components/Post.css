@@ -1,18 +1,25 @@
 .card {
-  width: 35vw;
-  min-height: 51vh;
-  background: white;
-  padding: 0.4em;
+  width: 40vw;
+  min-height: 80vh;
+  background: #212121;
+  padding: 1em;
   border-radius: 7px;
-  background: linear-gradient(1450deg, #f0f0f0, #ffffff);
-  box-shadow: 20px 20px 40px #bebebe, -20px -20px 40px #ffffff;
   margin-bottom: 2.5em;
-  border: 2px solid rgb(209, 209, 209);
+  color: white;
+  transition: 0.3s;
+}
+.card:hover {
+  cursor: pointer;
+  box-shadow: 0 0 5px #9333ea
 
 }
 
 .card-image img {
-  width: 100%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  object-fit: cover;
+  width: 80%;
   height: 40vh;
   border-radius: 6px 6px 0 0;
 }
@@ -20,7 +27,7 @@
 .heading {
   font-weight: 600;
   font-size: 1.5em;
-  color: rgb(88, 87, 87);
+  color: white;
   padding: 7px;
 }
 
@@ -29,7 +36,7 @@
 }
 
 .description {
-  color: gray;
+  color: rgb(145, 145, 145);
   font-weight: 400;
   font-size: 1em;
   padding-top: 20px;
@@ -39,76 +46,56 @@
   font-size: 0.8em;
   padding-top: 10px;
 }
-
-.upvote {
+.votes{
+  font-weight: 600;
+  font-size: 1.2em;
+}
+.action {
   background-image: linear-gradient(
     to right,
-    #385a64 0%,
-    #70b2c6 50%,
-    #46717e 100%
+    #b769d1 0%,
+    #9333ea 50%,
+    #933eaf 100%
   );
   padding: 10px 35px;
   text-transform: uppercase;
   transition: 0.5s;
   background-size: 200% auto;
   color: white;
-  box-shadow: 0 0 20px #eee;
   border-radius: 10px;
   display: block;
+  font-family: "Raleway", sans-serif;
+  font-weight: 500;
   margin-top: 15px;
 }
-
-.upvote:hover {
-  background-position: right center;
-  text-decoration: none;
-}
-.update {
+.delete{
   background-image: linear-gradient(
     to right,
-    #ff735c 0%,
-    #ffb3a7 50%,
-    #ff8f7e 100%
+    #ce2323 0%,
+    #af3e6f 60%,
+    #ff5151 100%
   );
-  padding: 10px 35px;
-  text-transform: uppercase;
-  transition: 0.5s;
-  background-size: 200% auto;
-  color: white;
-  box-shadow: 0 0 20px #eee;
-  border-radius: 10px;
-  display: block;
-  margin-top: 15px;
 }
-.update:hover {
-  background-position: right center;
-  text-decoration: none;
-}
-.delete {
+.update{
   background-image: linear-gradient(
     to right,
-    #ff1e1e 0%,
-    #ff7f6b 50%,
-    #ff4326 100%
+    #23ce45 0%,
+    #9333ea 60%,
+    #79ef67 100%
   );
-  padding: 10px 35px;
-  text-transform: uppercase;
-  transition: 0.5s;
-  background-size: 200% auto;
-  color: white;
-  box-shadow: 0 0 20px #eee;
-  border-radius: 10px;
-  display: block;
-  margin-top: 15px;
+
 }
 
-.delete:hover {
+.action:hover {
   background-position: right center;
   text-decoration: none;
 }
-.buttons {
+
+.action-buttons {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
   flex-wrap: wrap;
+  margin-top: 15px;
 }

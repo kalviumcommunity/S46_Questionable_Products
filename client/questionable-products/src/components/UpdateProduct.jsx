@@ -4,7 +4,7 @@ import { useState } from "react";
 import "./CreateProduct.css";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function UpdateProduct() {
@@ -44,8 +44,8 @@ function UpdateProduct() {
       .then(() => {
         toast.success("Product updated successfully");
         setTimeout(() => {
-          history("/");
-        }, 1500);
+          history("/home");
+        }, 1000);
       })
       .catch(() => {
         toast.error("Error updating product");
@@ -115,7 +115,7 @@ function UpdateProduct() {
           </div>
 
           <div className="modal__footer">
-            <button className="create" onClick={handleUpdate}>
+            <button className="button create" onClick={handleUpdate}>
               Update product
             </button>
           </div>

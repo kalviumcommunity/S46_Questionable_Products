@@ -3,6 +3,7 @@ const router = express.Router();
 const { User, Product } = require("./schema");
 const { userJoiSchema, productJoiSchema } = require("./joiSchema");
 const Joi = require("joi");
+const bcrypt = require("bcrypt");
 
 // creating a user and product (C)
 router.post("/users", async (req, res) => {
@@ -11,12 +12,25 @@ router.post("/users", async (req, res) => {
     if (error) {
       return res.status(400).json({ message: error.details[0].message });
     } else {
+      const usernameExists = await User.findOne({ username: req.body.username });
+      if (usernameExists) {
+        return res.status(400).json({ message: "Username already exists" });
+      }
+      const emailExists = await User.findOne({ email: req.body.email });
+      if (emailExists) {
+        return res.status(400).json({ message: "Email already exists" });
+      }
+
+      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+
       const user = new User({
         username: req.body.username,
         email: req.body.email,
-        password: req.body.password,
-        confirmPassword: req.body.confirmPassword,
+        password: hashedPassword,
+        confirmPassword: hashedPassword,
       });
+
       const newUser = await user.save();
       res.status(201).json(newUser);
     }
@@ -24,6 +38,31 @@ router.post("/users", async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 });
+
+router.post("/login", async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    if (!username || !password) {
+      return res.status(400).json({ message: "Username and password are required" })
+    }
+
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(400).json({ message: "User does not exist" })
+    }
+
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword) {
+      return res.status(400).json({ message: "Invalid password" })
+    }
+
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error" })
+  }
+});
+
+
 
 router.post("/products", async (req, res) => {
   try {
