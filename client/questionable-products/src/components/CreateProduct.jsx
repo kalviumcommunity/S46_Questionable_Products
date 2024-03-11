@@ -1,29 +1,33 @@
 import React, { useState } from "react";
-import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./CreateProduct.css";
+import axios from "axios";
+import { getCookie } from "../components/helpers/Cookies.js";
+
 
 function CreateProduct({ onCreatePost, onClose }) {
   const [title, setTitle] = useState("");
   const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
+  const jwtToken = getCookie("jwtToken");
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(import.meta.env.VITE_API_URL + "/products", {
-        title,
-        image,
-        description,
-        category,
-        votes: 0,
-      });
+      const response = await axios.post(
+        import.meta.env.VITE_API_URL + "/products",
+        { title, image, description, category, votes: 0 },
+        {
+          headers: { Authorization: `Bearer ${jwtToken}` },
+        }
+      );
       toast.success("Product created successfully");
       onCreatePost();
     } catch (error) {
-      toast.warn("Please fill all the fields");
+      toast.warn(error.response.data.message)
     }
   };
 

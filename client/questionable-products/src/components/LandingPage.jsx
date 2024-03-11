@@ -1,9 +1,10 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import "./LandingPage.css";
 import { TypewriterEffectSmooth } from "../components/ui/typewriter-effect";
 import { Link } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
+
 function LandingPage() {
   const words = [
     {
@@ -39,8 +40,7 @@ function LandingPage() {
         </div>
       </div>
       <p className="copyright">
-        All rights reserved. This project was created by
-        MELVIN.
+        All rights reserved. This project was created by MELVIN.
       </p>
     </>
   );

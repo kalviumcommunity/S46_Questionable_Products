@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import axios from "axios";
+import { setCookie } from "./helpers/Cookies";
+import React from "react";
 import "./Login.css";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { TypewriterEffectSmooth } from "../components/ui/typewriter-effect";
 import "react-toastify/dist/ReactToastify.css";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+
 
 function Login() {
   const navigate = useNavigate();
@@ -18,14 +20,13 @@ function Login() {
 
   const handleSignup = async (data) => {
     try {
-      const response = await axios.post(
-        import.meta.env.VITE_API_URL + "/login",
-        {
-          username: data.Username,
-          password: data.password,
-        }
-      );
+      const response = await axios.post( import.meta.env.VITE_API_URL+"/login", {
+        username: data.Username,
+        password: data.password,
+      });
       toast.success("Login Successful");
+
+      setCookie("jwtToken", response.data, 365);
       setCookie("username", data.Username, 365);
 
       setTimeout(() => {
@@ -35,16 +36,7 @@ function Login() {
       toast.error(err.response.data.message);
     }
   };
-  const setCookie = (name, value, daysToExpire) => {
-    let date = new Date();
-    date.setTime(date.getTime() + daysToExpire * 24 * 60 * 60 * 1000);
-    const expires = ";expires=" + date.toUTCString();
-    const secure = ";Secure";
-    const sameSite = ";SameSite=None";
 
-    document.cookie =
-      name + "=" + value + expires + ";path=/" + secure + sameSite;
-  };
   const words = [
     {
       text: "Hey! ",

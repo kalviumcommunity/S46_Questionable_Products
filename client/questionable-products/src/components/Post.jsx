@@ -1,30 +1,48 @@
 import React, { useState } from "react";
 import "./Post.css";
 import { Link } from "react-router-dom";
+import { getCookie } from "../components/helpers/Cookies.js";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 
-function Post({ image, title, category, description, votes, _id, onDelete, updateVotes}) {
+function Post({
+  image,
+  title,
+  category,
+  description,
+  votes,
+  _id,
+  onDelete,
+  updateVotes,
+}) {
+  
   const [localVotes, setLocalVotes] = useState(votes);
+  const jwtToken = getCookie("jwtToken");
 
   const handleDelete = () => {
     onDelete(_id);
   };
 
   const handleUpdate = (id) => {
-    setLocalVotes((prevVotes) => prevVotes + 1);
 
     axios
-      .put(import.meta.env.VITE_API_URL + "/products/"+ id, {
-        votes: localVotes + 1,
+      .put(`${import.meta.env.VITE_API_URL}/products/${_id}`, null, {
+        headers: { Authorization: `Bearer ${jwtToken}` },
+        params: { votes: localVotes + 1 },
       })
       .then((res) => {
-        updateVotes(_id)
+        updateVotes(_id);
+        setLocalVotes((prevVotes) => prevVotes + 1);
+
       })
       .catch((err) => {
-        console.log(err);
-        setLocalVotes((prevVotes) => prevVotes - 1);
+        if (localVotes > 0) {
+          toast.error(err.response.data.message);
+        }else{
+          toast.error(err.response.data.message);
+        }
       });
-
   };
 
   return (
