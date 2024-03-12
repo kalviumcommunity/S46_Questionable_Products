@@ -1,32 +1,49 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import "./Home.css";
 import Navbar from "./Navbar";
 import Post from "./Post";
-import axios from "axios";
 import CreateProduct from "./CreateProduct";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getCookie } from "../components/helpers/Cookies.js";
 
 function Home() {
   const [data, setData] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [showCreateProduct, setshowCreateProduct] = useState(false);
+  const jwtToken = getCookie("jwtToken");
 
   useEffect(() => {
-    axios.get(import.meta.env.VITE_API_URL + "/products").then((data) => {
-      setData(data.data);
-      setLoading(false);
-    });
-  });
+    axios
+      .get(import.meta.env.VITE_API_URL + "/products", {
+        headers: { authorization: `Bearer ${jwtToken}` },
+      })
+      .then((response) => {
+        setData(response.data)
+        setLoading(false)
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+        setLoading(false)
+      })
+  }, [])
 
   const handleCreatePostClick = () => {
     setshowCreateProduct(true);
   };
 
   const handleCreatePost = () => {
-    axios.get(import.meta.env.VITE_API_URL + "/products").then((data) => {
-      setData(data.data);
-    });
+    axios
+      .get(import.meta.env.VITE_API_URL + "/products", {
+        headers: { authorization: `Bearer ${jwtToken}` },
+      })
+      .then((data) => {
+        setData(data.data);
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+      });
     setshowCreateProduct(false);
   };
 
@@ -36,12 +53,14 @@ function Home() {
 
   const handlePostDelete = (id) => {
     axios
-      .delete(import.meta.env.VITE_API_URL + "/products/" + id)
+      .delete(import.meta.env.VITE_API_URL + "/products/" + id, {
+        headers: { authorization: `Bearer ${jwtToken}` },
+      })
       .then(() => {
         toast.error("Post Deleted Successfully");
       })
       .catch((err) => {
-        toast.error("Failed to delete post");
+        toast.error(err.response.data.message);
       });
   };
 

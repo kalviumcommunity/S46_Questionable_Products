@@ -1,4 +1,6 @@
 "use client";
+import axios from "axios";
+import { setCookie } from "./helpers/Cookies.js";
 import React from "react";
 import "./Signup.css";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,7 +8,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useForm } from "react-hook-form";
 import { TypewriterEffectSmooth } from "../components/ui/typewriter-effect";
-import axios from "axios";
+
 
 function Signup() {
   const navigate = useNavigate();
@@ -32,9 +34,11 @@ function Signup() {
           }
         );
         toast.success("Signup Successful");
+        setCookie('jwtToken', response.data, 365)
+        setCookie('username', data.Username, 365,)
 
         setTimeout(() => {
-          navigate("/login");
+          navigate("/home");
         }, 1000);
       } catch (err) {
         toast.error(err.response.data.message);

@@ -3,9 +3,13 @@ import "./UpdateProduct.css";
 import { useState } from "react";
 import "./CreateProduct.css";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
+import { getCookie } from "../components/helpers/Cookies.js";
+
+
+
 
 function UpdateProduct() {
   const { id } = useParams();
@@ -13,42 +17,50 @@ function UpdateProduct() {
   const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
+  const jwtToken = getCookie("jwtToken");
+
 
   const history = useNavigate();
-  
+
   useEffect(() => {
     axios
-      .get(import.meta.env.VITE_API_URL + "/products/"+ id)
+      .get(import.meta.env.VITE_API_URL + "/products/" + id, {
+        headers: { authorization: `Bearer ${jwtToken}` },
+      })
       .then((data) => {
         setTitle(data.data.title);
         setImage(data.data.image);
         setDescription(data.data.description);
         setCategory(data.data.category);
-        
       })
-      .catch(() => {
-        toast.error("Error fetching product details");
+      .catch((err) => {
+        toast.error(err.response.data.message);
       });
   }, [id]);
 
   const handleUpdate = async (e) => {
     e.preventDefault();
     axios
-      .put(import.meta.env.VITE_API_URL + "/products/"+ id, {
-        title,
-        image,
-        description,
-        category,
-        
-      })
+      .put(
+        import.meta.env.VITE_API_URL + "/products/" + id,
+        {
+          title,
+          image,
+          description,
+          category,
+        },
+        {
+          headers: { authorization: `Bearer ${jwtToken}` },
+        }
+      )
       .then(() => {
         toast.success("Product updated successfully");
         setTimeout(() => {
           history("/home");
         }, 1000);
       })
-      .catch(() => {
-        toast.error("Error updating product");
+      .catch((err) => {
+        toast.error(err.response.data.message);
       });
   };
 
