@@ -17,6 +17,10 @@ const productSchema = new mongoose.Schema({
   votes: {
     type: Number,
   },
+  postedBy: {
+    type: String,
+    required: true, 
+  },
 });
 
 const userSchema = new mongoose.Schema({

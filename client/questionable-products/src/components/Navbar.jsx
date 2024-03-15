@@ -8,14 +8,12 @@ function Navbar() {
   const [username, setUsername] = useState("");
   const navigate = useNavigate();
 
-  
   useEffect(() => {
     const usernameFromCookie = getCookie("username");
     if (usernameFromCookie) {
       setUsername(usernameFromCookie);
     }
   }, []);
-
 
   function handleLogout() {
     document.cookie =
@@ -41,7 +39,9 @@ function Navbar() {
 
       {username ? (
         <div className="logged-in-user">
-          <button className="button">{username}</button>
+          <Link to="/profile">
+            <button className="button">{username}</button>
+          </Link>
           <button className="button" onClick={handleLogout}>
             Log out
           </button>

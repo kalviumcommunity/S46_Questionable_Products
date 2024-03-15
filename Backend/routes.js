@@ -109,6 +109,8 @@ router.post("/products", authenticate, async (req, res) => {
       description: req.body.description,
       category: req.body.category,
       votes: req.body.votes,
+      postedBy: req.body.postedBy,
+      createdAt: req.body.createdAt,
     });
 
     const newProduct = await product.save();

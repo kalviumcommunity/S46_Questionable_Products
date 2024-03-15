@@ -5,29 +5,35 @@ import "./CreateProduct.css";
 import axios from "axios";
 import { getCookie } from "../components/helpers/Cookies.js";
 
-
 function CreateProduct({ onCreatePost, onClose }) {
   const [title, setTitle] = useState("");
   const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const jwtToken = getCookie("jwtToken");
-
-
+  const postedBy = getCookie("username");
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post(
         import.meta.env.VITE_API_URL + "/products",
-        { title, image, description, category, votes: 0 },
         {
-          headers: { Authorization: `Bearer ${jwtToken}` },
+          title,
+          image,
+          postedBy: postedBy,
+          description,
+          category,
+          votes: 0,
+        },
+        {
+          headers: { authorization: `Bearer ${jwtToken}` },
         }
       );
-      toast.success("Product created successfully");
+      toast.success("Post created successfully");
       onCreatePost();
     } catch (error) {
-      toast.warn(error.response.data.message)
+      toast.warn(error.response.data.message);
     }
   };
 

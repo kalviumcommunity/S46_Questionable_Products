@@ -12,6 +12,8 @@ function Home() {
   const [data, setData] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [showCreateProduct, setshowCreateProduct] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [selected, setSelected] = useState("All Users")
   const jwtToken = getCookie("jwtToken");
 
   useEffect(() => {
@@ -20,14 +22,27 @@ function Home() {
         headers: { authorization: `Bearer ${jwtToken}` },
       })
       .then((response) => {
-        setData(response.data)
-        setLoading(false)
+        setData(response.data);
+        setLoading(false);
       })
       .catch((err) => {
         toast.error(err.response.data.message);
-        setLoading(false)
+        setLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    axios
+      .get(import.meta.env.VITE_API_URL + "/users", {
+        headers: { authorization: `Bearer ${jwtToken}` },
       })
-  }, [])
+      .then((response) => {
+        setUsers(response.data);
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message);
+      });
+  }, []);
 
   const handleCreatePostClick = () => {
     setshowCreateProduct(true);
@@ -39,7 +54,7 @@ function Home() {
         headers: { authorization: `Bearer ${jwtToken}` },
       })
       .then((data) => {
-        setData(data.data);
+        console.log(data.data);
       })
       .catch((err) => {
         toast.error(err.response.data.message);
@@ -58,6 +73,9 @@ function Home() {
       })
       .then(() => {
         toast.error("Post Deleted Successfully");
+        setTimeout(() => {
+          window.location.reload();
+        }, 1500);
       })
       .catch((err) => {
         toast.error(err.response.data.message);
@@ -72,6 +90,10 @@ function Home() {
     });
   };
 
+  const handeSelection = (e) => {
+    setSelected(e.target.value);
+  };
+
   if (isLoading) {
     return (
       <div className="flexx">
@@ -82,16 +104,32 @@ function Home() {
     );
   }
 
+  const Posts = data.filter((posts)=>{
+    if(selected==='All Users'){
+      return posts;
+    }else{
+      return posts.postedBy===selected;
+    }
+  })
+
   return (
     <div>
       <Navbar />
+      <select name="users" className="select-container"  onChange={handeSelection}>
+        <option value="All Users">All Users</option>
+        {users &&
+          users.map((user) => (
+            <option value={user.username} className="options"  key={user._id}>{user.username}</option>
+          ))}
+      </select>
+
       <button className="posts" onClick={handleCreatePostClick}>
         Create Post
       </button>
-      <div></div>
+
       <div className="posts-container">
-        {data &&
-          data.map((post) => (
+        {Posts &&
+          Posts.map((post) => (
             <Post
               {...post}
               key={post._id}

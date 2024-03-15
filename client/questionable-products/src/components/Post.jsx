@@ -12,43 +12,49 @@ function Post({
   category,
   description,
   votes,
+  postedBy,
   _id,
   onDelete,
   updateVotes,
+  fromProfile,
 }) {
-  
   const [localVotes, setLocalVotes] = useState(votes);
   const jwtToken = getCookie("jwtToken");
-
   const handleDelete = () => {
     onDelete(_id);
   };
 
-  const handleUpdate = (id) => {
-
+  const handleUpdate = (_id) => {
     axios
-      .put(`${import.meta.env.VITE_API_URL}/products/${_id}`, null, {
-        headers: { Authorization: `Bearer ${jwtToken}` },
-        params: { votes: localVotes + 1 },
-      })
+      .put(
+        `${import.meta.env.VITE_API_URL}/products/${_id}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${jwtToken}` },
+          params: { votes: localVotes + 1 },
+        }
+      )
       .then((res) => {
         updateVotes(_id);
         setLocalVotes((prevVotes) => prevVotes + 1);
-
       })
       .catch((err) => {
         if (localVotes > 0) {
           toast.error(err.response.data.message);
-        }else{
+        } else {
           toast.error(err.response.data.message);
         }
       });
   };
-
   return (
     <div>
       <div className="card">
-        <div className="heading">{title}</div>
+        <div
+          className="
+        heading"
+        >
+          {title}
+        </div>
         <div className="card-image">
           <img src={image} alt="" />
         </div>
@@ -56,19 +62,27 @@ function Post({
         <div className="description">{description}</div>
         <div className="category">Category: {category}</div>
         <h1 className="votes">{localVotes ? localVotes : 0}</h1>
+        <p>Posted By: {postedBy} </p>
 
-        <div className="action-buttons">
-          <button className="action upvote" onClick={(e) => handleUpdate(_id)}>
-            UPVOTE
-          </button>
-
-          <Link to={`/products/${_id}`}>
-            <button className="button update">UPDATE</button>
-          </Link>
-          <button className="action delete" onClick={handleDelete}>
-            DELETE
-          </button>
-        </div>
+        {!fromProfile ? (
+          <div className="action-buttons">
+            <button
+              className="action upvote"
+              onClick={(e) => handleUpdate(_id)}
+            >
+              UPVOTE
+            </button>
+          </div>
+        ) : (
+          <div className="action-buttons">
+            <button className="action delete" onClick={handleDelete}>
+              DELETE
+            </button>
+            <Link to={`/products/${_id}`}>
+              <button className="button update">UPDATE</button>
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );

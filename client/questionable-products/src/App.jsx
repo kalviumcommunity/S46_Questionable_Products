@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import UpdateProduct from './components/UpdateProduct'
 import LandingPage from './components/LandingPage';
 import Login from './components/Login';
+import Profile from './components/Profile';
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
       <Route path='/login' element= {<Login />} ></Route>
       <Route path='/home' element= {<Home />} ></Route>
       <Route path='/signup' element= {<Signup/>} ></Route> 
+      <Route path='/profile' element= {<Profile />} ></Route>
       <Route path='/products/:id' element= {<UpdateProduct />} ></Route>
     </Routes>
 

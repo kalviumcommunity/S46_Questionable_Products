@@ -9,8 +9,6 @@ import axios from "axios";
 import { getCookie } from "../components/helpers/Cookies.js";
 
 
-
-
 function UpdateProduct() {
   const { id } = useParams();
   const [title, setTitle] = useState("");
@@ -18,6 +16,7 @@ function UpdateProduct() {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const jwtToken = getCookie("jwtToken");
+  const postedBy = getCookie("username")
 
 
   const history = useNavigate();
@@ -48,13 +47,14 @@ function UpdateProduct() {
           image,
           description,
           category,
+          postedBy,
         },
         {
           headers: { authorization: `Bearer ${jwtToken}` },
         }
       )
       .then(() => {
-        toast.success("Product updated successfully");
+        toast.success("Post updated successfully");
         setTimeout(() => {
           history("/home");
         }, 1000);
