@@ -8,6 +8,7 @@ import { TypewriterEffectSmooth } from "../components/ui/typewriter-effect";
 import Post from "./Post";
 import "./Profile.css";
 import CreateProduct from "./CreateProduct";
+import { Link } from "react-router-dom";
 
 function Profile() {
   const [userPosts, setUserPosts] = useState([]);
@@ -65,7 +66,6 @@ function Profile() {
         headers: { authorization: `Bearer ${jwtToken}` },
       })
       .then((data) => {
-        console.log(data.data);
         setUserPosts(data.data);
       })
       .catch((err) => {
@@ -81,9 +81,7 @@ function Profile() {
       })
       .then(() => {
         toast.error("Post Deleted Successfully");
-        setTimeout(() => { 
-          window.location.reload()
-        }, 1500)
+        setUserPosts(userPosts.filter((post) => post._id !== id));
       })
       .catch((err) => {
         toast.error(err.response.data.message);
@@ -101,13 +99,13 @@ function Profile() {
             <TypewriterEffectSmooth words={words} />
           </h1>
         </div>
-        <div>
-          <img src="" alt="" />
-        </div>
       </div>
       <button className="posts" onClick={handleCreatePostClick}>
         Create Post
       </button>
+      <Link to="/home">
+        <button className="button home">Home</button>
+      </Link>
       {showCreateProduct && (
         <CreateProduct
           onCreatePost={handleCreatePost}

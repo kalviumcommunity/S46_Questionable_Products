@@ -65,23 +65,7 @@ function Home() {
   const handleCloseModal = () => {
     setshowCreateProduct(false);
   };
-
-  const handlePostDelete = (id) => {
-    axios
-      .delete(import.meta.env.VITE_API_URL + "/products/" + id, {
-        headers: { authorization: `Bearer ${jwtToken}` },
-      })
-      .then(() => {
-        toast.error("Post Deleted Successfully");
-        setTimeout(() => {
-          window.location.reload();
-        }, 1500);
-      })
-      .catch((err) => {
-        toast.error(err.response.data.message);
-      });
-  };
-
+  // Update Votes Function to Update Votes in the Database and Display Toast Message to the User
   const updateVotes = () => {
     toast.success("Vote Updated Successfully", {
       position: "bottom-center",
@@ -93,7 +77,7 @@ function Home() {
   const handeSelection = (e) => {
     setSelected(e.target.value);
   };
-
+  
   if (isLoading) {
     return (
       <div className="flexx">
@@ -133,7 +117,6 @@ function Home() {
             <Post
               {...post}
               key={post._id}
-              onDelete={handlePostDelete}
               updateVotes={updateVotes}
             />
           ))}

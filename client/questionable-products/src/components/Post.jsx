@@ -20,6 +20,7 @@ function Post({
 }) {
   const [localVotes, setLocalVotes] = useState(votes);
   const jwtToken = getCookie("jwtToken");
+
   const handleDelete = () => {
     onDelete(_id);
   };
@@ -56,7 +57,7 @@ function Post({
           {title}
         </div>
         <div className="card-image">
-          <img src={image} alt="" />
+          <img src={image} alt="Image of ${title} productz"/>
         </div>
 
         <div className="description">{description}</div>
