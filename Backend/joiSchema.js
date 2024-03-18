@@ -12,6 +12,7 @@ const productJoiSchema = joi.object({
   category: joi.string(),
   image: joi.string(),
   votes: joi.number(),
+  postedBy: joi.string(),
 });
 
 module.exports = {

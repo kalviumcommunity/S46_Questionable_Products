@@ -1,0 +1,12 @@
+.hero{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50vh;
+    color: #fff;
+}
+.home{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
