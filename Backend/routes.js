@@ -2,8 +2,6 @@ require("dotenv").config();
 const express = require("express");
 const router = express.Router();
 const { User, Product } = require("./schema");
-const { userJoiSchema, productJoiSchema } = require("./joiSchema");
-const Joi = require("joi");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -33,10 +31,6 @@ const authenticate = (req, res, next) => {
 // creating a user and product (C)
 router.post("/users", async (req, res) => {
   try {
-    const { error } = userJoiSchema.validate(req.body);
-    if (error) {
-      return res.status(400).json({ message: error.details[0].message });
-    } else {
       const usernameExists = await User.findOne({ username: req.body.username });
       if (usernameExists) {
         return res.status(409).json({ message: "Username already exists" });
@@ -62,7 +56,6 @@ router.post("/users", async (req, res) => {
       });
 
       res.status(201).json(token);
-    }
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
@@ -96,13 +89,8 @@ router.post("/login", async (req, res) => {
   }
 });
 
-
-
 router.post("/products", authenticate, async (req, res) => {
   try {
-    const { error } = productJoiSchema.validate(req.body);
-    if (error) throw error;
-
     const product = new Product({
       title: req.body.title,
       image: req.body.image,
@@ -157,9 +145,6 @@ router.get("/products/:id",authenticate, (req, res) => {
 // Updating a user and product (U)
 router.patch("/users/:id",authenticate, async (req, res) => {
   try {
-    const { error } = userJoiSchema.validate(req.body);
-    if (error) throw error;
-
     const user = await User.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
@@ -173,9 +158,6 @@ router.patch("/users/:id",authenticate, async (req, res) => {
 
 router.put("/products/:id",authenticate, async (req, res) => {
   try {
-    const { error } = productJoiSchema.validate(req.body);
-    if (error) throw error;
-
     const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
