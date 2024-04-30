@@ -9,29 +9,35 @@ router.use(express.json());
 
 const createToken = (payload) => {
   return jwt.sign(payload, process.env.JWT_SECRET, {
-    expiresIn: 1 * 24 * 60 * 60
+    expiresIn: 1 * 24 * 60 * 60,
   });
 };
 
 const authenticate = (req, res, next) => {
   const token = req.headers.authorization;
-  if (!token || !token.startsWith('Bearer ')) {
-      return res.status(401).send({message:'Unauthorized: No token provided'});
+  if (!token || !token.startsWith("Bearer ")) {
+    return res.status(401).send({ message: "Unauthorized: No token provided" });
   }
-  const authToken = token.split('Bearer ')[1];
+  const authToken = token.split("Bearer ")[1];
   try {
-      const decoded = jwt.verify(authToken, process.env.JWT_SECRET);
-      req.user = decoded
-      next()
+    const decoded = jwt.verify(authToken, process.env.JWT_SECRET);
+    req.user = decoded;
+    next();
   } catch (error) {
-      return res.status(403).send({message: 'Forbidden: Invalid token'});
+    return res.status(403).send({ message: "Forbidden: Invalid token" });
   }
-}
+};
 
 // creating a user and product (C)
 router.post("/users", async (req, res) => {
   try {
-      const usernameExists = await User.findOne({ username: req.body.username });
+    const { error } = userJoiSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    } else {
+      const usernameExists = await User.findOne({
+        username: req.body.username,
+      });
       if (usernameExists) {
         return res.status(409).json({ message: "Username already exists" });
       }
@@ -42,11 +48,10 @@ router.post("/users", async (req, res) => {
 
       const hashedPassword = await bcrypt.hash(req.body.password, 12);
 
-
       const user = new User({
         username: req.body.username,
         email: req.body.email,
-        password: hashedPassword
+        password: hashedPassword,
       });
 
       const newUser = await user.save();
@@ -56,6 +61,7 @@ router.post("/users", async (req, res) => {
       });
 
       res.status(201).json(token);
+    }
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
@@ -65,17 +71,19 @@ router.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
     if (!username || !password) {
-      return res.status(400).json({ message: "Username and password are required" })
+      return res
+        .status(400)
+        .json({ message: "Username and password are required" });
     }
 
     const user = await User.findOne({ username });
     if (!user) {
-      return res.status(400).json({ message: "User does not exist" })
+      return res.status(400).json({ message: "User does not exist" });
     }
 
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
-      return res.status(401).json({ message: "Invalid password" })
+      return res.status(401).json({ message: "Invalid password" });
     }
 
     const token = createToken({
@@ -83,14 +91,17 @@ router.post("/login", async (req, res) => {
       username: user.username,
     });
 
-    res.status(200).json( token );
+    res.status(200).json(token);
   } catch (err) {
-    res.status(500).json({ message: "Internal server error" })
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
 router.post("/products", authenticate, async (req, res) => {
   try {
+    const { error } = productJoiSchema.validate(req.body);
+    if (error) throw error;
+
     const product = new Product({
       title: req.body.title,
       image: req.body.image,
@@ -104,12 +115,12 @@ router.post("/products", authenticate, async (req, res) => {
     const newProduct = await product.save();
     res.status(201).json(newProduct);
   } catch (err) {
-      res.status(400).json({ message: err.message });
-    }
+    res.status(400).json({ message: err.message });
+  }
 });
 
 // getting all users and products (R)
-router.get("/users",authenticate, async (req, res) => {
+router.get("/users", authenticate, async (req, res) => {
   try {
     const users = await User.find();
     res.json(users);
@@ -118,7 +129,7 @@ router.get("/users",authenticate, async (req, res) => {
   }
 });
 
-router.get("/products",authenticate, async (req, res) => {
+router.get("/products", authenticate, async (req, res) => {
   try {
     const products = await Product.find();
     res.json(products);
@@ -135,7 +146,7 @@ router.get("/users/:id", (req, res) => {
     .catch((err) => res.status(404).json({ message: "User not found" }));
 });
 
-router.get("/products/:id",authenticate, (req, res) => {
+router.get("/products/:id", authenticate, (req, res) => {
   const id = req.params.id;
   Product.findById(id)
     .then((data) => res.json(data))
@@ -143,8 +154,11 @@ router.get("/products/:id",authenticate, (req, res) => {
 });
 
 // Updating a user and product (U)
-router.patch("/users/:id",authenticate, async (req, res) => {
+router.patch("/users/:id", authenticate, async (req, res) => {
   try {
+    const { error } = userJoiSchema.validate(req.body);
+    if (error) throw error;
+
     const user = await User.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
@@ -156,8 +170,11 @@ router.patch("/users/:id",authenticate, async (req, res) => {
   }
 });
 
-router.put("/products/:id",authenticate, async (req, res) => {
+router.put("/products/:id", authenticate, async (req, res) => {
   try {
+    const { error } = productJoiSchema.validate(req.body);
+    if (error) throw error;
+
     const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
     });
@@ -170,7 +187,7 @@ router.put("/products/:id",authenticate, async (req, res) => {
 });
 
 // deleting a user and product (D)
-router.delete("/users/:id",authenticate, async (req, res) => {
+router.delete("/users/:id", authenticate, async (req, res) => {
   try {
     const deletedUser = await User.findByIdAndDelete(req.params.id);
     if (!deletedUser)
@@ -182,7 +199,7 @@ router.delete("/users/:id",authenticate, async (req, res) => {
   }
 });
 
-router.delete("/products/:id",authenticate, async (req, res) => {
+router.delete("/products/:id", authenticate, async (req, res) => {
   try {
     const deletedProduct = await Product.findByIdAndDelete(req.params.id);
     if (!deletedProduct)
