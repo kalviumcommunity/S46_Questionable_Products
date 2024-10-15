@@ -11,12 +11,12 @@ router.use(express.json());
 router.use(cookieParser());
 
 const createAccessToken = (payload) => {
-  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1m" });
+  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "15m" });
 };
 
 const createRefreshToken = (payload) => {
   return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, {
-    expiresIn: "5m",
+    expiresIn: "2d",
   });
 };
 
