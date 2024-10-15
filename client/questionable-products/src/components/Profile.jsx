@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getCookie } from "../components/helpers/Cookies.js";
@@ -9,12 +8,12 @@ import Post from "./Post";
 import "./Profile.css";
 import CreateProduct from "./CreateProduct";
 import { Link } from "react-router-dom";
+import axiosInstance from "./helpers/axiosConfig.js";
 
 function Profile() {
   const [userPosts, setUserPosts] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [showCreateProduct, setshowCreateProduct] = useState(false);
-  const jwtToken = getCookie("jwtToken");
   const username = getCookie("username");
   const words = [
     {
@@ -30,10 +29,8 @@ function Profile() {
   ];
 
   useEffect(() => {
-    axios
-      .get(import.meta.env.VITE_API_URL + "/products", {
-        headers: { authorization: `Bearer ${jwtToken}` },
-      })
+    axiosInstance
+      .get(import.meta.env.VITE_API_URL + "/products")
       .then((response) => {
         const filteredPosts = response.data.filter(
           (post) => post.postedBy === username
@@ -47,24 +44,13 @@ function Profile() {
       });
   }, []);
 
-  if (isLoading) {
-    return (
-      <div className="flexx">
-        <svg className="spinner" viewBox="25 25 50 50">
-          <circle r="20" cy="50" cx="50"></circle>
-        </svg>
-      </div>
-    );
-  }
   const handleCreatePostClick = () => {
     setshowCreateProduct(true);
   };
 
   const handleCreatePost = () => {
-    axios
-      .get(import.meta.env.VITE_API_URL + "/products", {
-        headers: { authorization: `Bearer ${jwtToken}` },
-      })
+    axiosInstance
+      .get(import.meta.env.VITE_API_URL + "/products")
       .then((data) => {
         setUserPosts(data.data);
       })
@@ -75,10 +61,8 @@ function Profile() {
   };
 
   const handlePostDelete = (id) => {
-    axios
-      .delete(import.meta.env.VITE_API_URL + "/products/" + id, {
-        headers: { authorization: `Bearer ${jwtToken}` },
-      })
+    axiosInstance
+      .delete(import.meta.env.VITE_API_URL + "/products/" + id)
       .then(() => {
         toast.error("Post Deleted Successfully");
         setUserPosts(userPosts.filter((post) => post._id !== id));
@@ -90,6 +74,16 @@ function Profile() {
   const handleCloseModal = () => {
     setshowCreateProduct(false);
   };
+
+  if (isLoading) {
+    return (
+      <div className="flexx">
+        <svg className="spinner" viewBox="25 25 50 50">
+          <circle r="20" cy="50" cx="50"></circle>
+        </svg>
+      </div>
+    );
+  }
 
   return (
     <div>

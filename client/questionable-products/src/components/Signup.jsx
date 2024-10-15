@@ -9,7 +9,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { useForm } from "react-hook-form";
 import { TypewriterEffectSmooth } from "../components/ui/typewriter-effect";
 
-
 function Signup() {
   const navigate = useNavigate();
   const {
@@ -31,20 +30,26 @@ function Signup() {
             email: data.email,
             password: data.password,
             confirmPassword: data.confirm,
+          },
+          {
+            withCredentials: true,
           }
         );
+
+        const { accessToken } = response.data;
         toast.success("Signup Successful");
-        setCookie('jwtToken', response.data, 365)
-        setCookie('username', data.Username, 365,)
+        localStorage.setItem("accessToken", accessToken);
+        setCookie("username", data.Username, 365);
 
         setTimeout(() => {
           navigate("/home");
         }, 1000);
       } catch (err) {
-        toast.error(err.response.data.message);
+        toast.error(err.response?.data?.message || "Signup failed");
       }
     }
   };
+
   const words = [
     {
       text: "Welcome to",

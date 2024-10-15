@@ -8,7 +8,6 @@ import { TypewriterEffectSmooth } from "../components/ui/typewriter-effect";
 import "react-toastify/dist/ReactToastify.css";
 import { useForm } from "react-hook-form";
 
-
 function Login() {
   const navigate = useNavigate();
   const {
@@ -18,22 +17,31 @@ function Login() {
     formState: { errors },
   } = useForm();
 
-  const handleSignup = async (data) => {
+  const handleLogin = async (data) => {
     try {
-      const response = await axios.post( import.meta.env.VITE_API_URL+"/login", {
-        username: data.Username,
-        password: data.password,
-      });
+      const response = await axios.post(
+        import.meta.env.VITE_API_URL + "/login",
+        {
+          username: data.Username,
+          password: data.password,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+
+      const { accessToken } = response.data;
+
       toast.success("Login Successful");
 
-      setCookie("jwtToken", response.data, 365);
+      localStorage.setItem("accessToken", accessToken);
       setCookie("username", data.Username, 365);
 
       setTimeout(() => {
         navigate("/home");
       }, 1000);
     } catch (err) {
-      toast.error(err.response.data.message);
+      toast.error(err.response?.data?.message || "Login failed");
     }
   };
 
@@ -57,7 +65,7 @@ function Login() {
         <TypewriterEffectSmooth words={words} />
       </h1>
       <div>
-        <form onSubmit={handleSubmit(handleSignup)}>
+        <form onSubmit={handleSubmit(handleLogin)}>
           <input
             className="username"
             placeholder="Username"

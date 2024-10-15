@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import "./Post.css";
 import { Link } from "react-router-dom";
-import { getCookie } from "../components/helpers/Cookies.js";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
+import axiosInstance from "./helpers/axiosConfig.js";
 
 function Post({
   image,
@@ -19,19 +18,17 @@ function Post({
   fromProfile,
 }) {
   const [localVotes, setLocalVotes] = useState(votes);
-  const jwtToken = getCookie("jwtToken");
 
   const handleDelete = () => {
     onDelete(_id);
   };
 
   const handleUpdate = (_id) => {
-    axios
+    axiosInstance
       .put(
         `${import.meta.env.VITE_API_URL}/products/${_id}`,
         {},
         {
-          headers: { Authorization: `Bearer ${jwtToken}` },
           params: { votes: localVotes + 1 },
         }
       )
@@ -57,7 +54,7 @@ function Post({
           {title}
         </div>
         <div className="card-image">
-          <img src={image} alt="Image of ${title} productz"/>
+          <img src={image} alt="Image of ${title} productz" />
         </div>
 
         <div className="description">{description}</div>

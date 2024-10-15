@@ -2,21 +2,20 @@ import React, { useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./CreateProduct.css";
-import axios from "axios";
 import { getCookie } from "../components/helpers/Cookies.js";
+import axiosInstance from "./helpers/axiosConfig.js";
 
 function CreateProduct({ onCreatePost, onClose }) {
   const [title, setTitle] = useState("");
   const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
-  const jwtToken = getCookie("jwtToken");
   const postedBy = getCookie("username");
   
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
+      const response = await axiosInstance.post(
         import.meta.env.VITE_API_URL + "/products",
         {
           title,
@@ -25,9 +24,6 @@ function CreateProduct({ onCreatePost, onClose }) {
           description,
           category,
           votes: 0,
-        },
-        {
-          headers: { authorization: `Bearer ${jwtToken}` },
         }
       );
       toast.success("Post created successfully");
