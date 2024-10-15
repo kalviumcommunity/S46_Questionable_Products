@@ -1,26 +1,22 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import "./Home.css";
 import Navbar from "./Navbar";
 import Post from "./Post";
 import CreateProduct from "./CreateProduct";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { getCookie } from "../components/helpers/Cookies.js";
+import axiosInstance from "./helpers/axiosConfig.js";
 
 function Home() {
   const [data, setData] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [showCreateProduct, setshowCreateProduct] = useState(false);
   const [users, setUsers] = useState([]);
-  const [selected, setSelected] = useState("All Users")
-  const jwtToken = getCookie("jwtToken");
+  const [selected, setSelected] = useState("All Users");
 
   useEffect(() => {
-    axios
-      .get(import.meta.env.VITE_API_URL + "/products", {
-        headers: { authorization: `Bearer ${jwtToken}` },
-      })
+    axiosInstance
+      .get(import.meta.env.VITE_API_URL + "/products")
       .then((response) => {
         setData(response.data);
         setLoading(false);
@@ -32,10 +28,8 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    axios
-      .get(import.meta.env.VITE_API_URL + "/users", {
-        headers: { authorization: `Bearer ${jwtToken}` },
-      })
+    axiosInstance
+      .get(import.meta.env.VITE_API_URL + "/users")
       .then((response) => {
         setUsers(response.data);
       })
@@ -49,13 +43,8 @@ function Home() {
   };
 
   const handleCreatePost = () => {
-    axios
-      .get(import.meta.env.VITE_API_URL + "/products", {
-        headers: { authorization: `Bearer ${jwtToken}` },
-      })
-      .then((data) => {
-        console.log(data.data);
-      })
+    axiosInstance
+      .get(import.meta.env.VITE_API_URL + "/products")
       .catch((err) => {
         toast.error(err.response.data.message);
       });
@@ -65,7 +54,6 @@ function Home() {
   const handleCloseModal = () => {
     setshowCreateProduct(false);
   };
-  // Update Votes Function to Update Votes in the Database and Display Toast Message to the User
   const updateVotes = () => {
     toast.success("Vote Updated Successfully", {
       position: "bottom-center",
@@ -77,7 +65,7 @@ function Home() {
   const handeSelection = (e) => {
     setSelected(e.target.value);
   };
-  
+
   if (isLoading) {
     return (
       <div className="flexx">
@@ -88,22 +76,28 @@ function Home() {
     );
   }
 
-  const Posts = data.filter((posts)=>{
-    if(selected==='All Users'){
+  const Posts = data.filter((posts) => {
+    if (selected === "All Users") {
       return posts;
-    }else{
-      return posts.postedBy===selected;
+    } else {
+      return posts.postedBy === selected;
     }
-  })
+  });
 
   return (
     <div>
       <Navbar />
-      <select name="users" className="select-container"  onChange={handeSelection}>
+      <select
+        name="users"
+        className="select-container"
+        onChange={handeSelection}
+      >
         <option value="All Users">All Users</option>
         {users &&
           users.map((user) => (
-            <option value={user.username} className="options"  key={user._id}>{user.username}</option>
+            <option value={user.username} className="options" key={user._id}>
+              {user.username}
+            </option>
           ))}
       </select>
 
@@ -114,11 +108,7 @@ function Home() {
       <div className="posts-container">
         {Posts &&
           Posts.map((post) => (
-            <Post
-              {...post}
-              key={post._id}
-              updateVotes={updateVotes}
-            />
+            <Post {...post} key={post._id} updateVotes={updateVotes} />
           ))}
       </div>
 

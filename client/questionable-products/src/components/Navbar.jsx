@@ -3,6 +3,8 @@ import "./Navbar.css";
 import searchIcon from "../assets/search-b.png";
 import { Link, useNavigate } from "react-router-dom";
 import { getCookie } from "./helpers/Cookies";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 function Navbar() {
   const [username, setUsername] = useState("");
@@ -15,14 +17,20 @@ function Navbar() {
     }
   }, []);
 
-  function handleLogout() {
-    document.cookie =
-      "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    document.cookie =
-      "jwtToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    setUsername("");
-    navigate("/");
-  }
+  const handleLogout = () => {
+    axios
+      .post(import.meta.env.VITE_API_URL + "/logout", {}, { withCredentials: true })
+      .then((response) => {
+        toast.success(response.data.message);
+        localStorage.removeItem("accessToken");
+        setUsername("");
+        navigate("/");
+      })
+      .catch((err) => {
+        toast.error(err.response?.data?.message || "Logout failed");
+      });
+  };
+
 
   return (
     <div className="navbar">

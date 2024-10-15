@@ -5,9 +5,8 @@ import "./CreateProduct.css";
 import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
+import axiosInstance from "./helpers/axiosConfig.js";
 import { getCookie } from "../components/helpers/Cookies.js";
-
 
 function UpdateProduct() {
   const { id } = useParams();
@@ -15,17 +14,13 @@ function UpdateProduct() {
   const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
-  const jwtToken = getCookie("jwtToken");
-  const postedBy = getCookie("username")
-
+  const postedBy = getCookie("username");
 
   const history = useNavigate();
 
   useEffect(() => {
-    axios
-      .get(import.meta.env.VITE_API_URL + "/products/" + id, {
-        headers: { authorization: `Bearer ${jwtToken}` },
-      })
+    axiosInstance
+      .get(import.meta.env.VITE_API_URL + "/products/" + id)
       .then((data) => {
         setTitle(data.data.title);
         setImage(data.data.image);
@@ -39,20 +34,14 @@ function UpdateProduct() {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    axios
-      .put(
-        import.meta.env.VITE_API_URL + "/products/" + id,
-        {
-          title,
-          image,
-          description,
-          category,
-          postedBy,
-        },
-        {
-          headers: { authorization: `Bearer ${jwtToken}` },
-        }
-      )
+    axiosInstance
+      .put(import.meta.env.VITE_API_URL + "/products/" + id, {
+        title,
+        image,
+        description,
+        category,
+        postedBy,
+      })
       .then(() => {
         toast.success("Post updated successfully");
         setTimeout(() => {

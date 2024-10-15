@@ -4,12 +4,19 @@ const router = express.Router();
 const { User, Product } = require("./schema");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { userJoiSchema, productJoiSchema } = require("./joiSchema");
+const cookieParser = require("cookie-parser");
 
 router.use(express.json());
+router.use(cookieParser());
 
-const createToken = (payload) => {
-  return jwt.sign(payload, process.env.JWT_SECRET, {
-    expiresIn: 1 * 24 * 60 * 60,
+const createAccessToken = (payload) => {
+  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1m" });
+};
+
+const createRefreshToken = (payload) => {
+  return jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, {
+    expiresIn: "5m",
   });
 };
 
@@ -24,7 +31,10 @@ const authenticate = (req, res, next) => {
     req.user = decoded;
     next();
   } catch (error) {
-    return res.status(403).send({ message: "Forbidden: Invalid token" });
+    if (error.name === "TokenExpiredError") {
+      return res.status(401).send({ message: "Unauthorized: Token expired" });
+    }
+    return res.status(401).send({ message: "Unauthorized: Invalid token" });
   }
 };
 
@@ -55,12 +65,24 @@ router.post("/users", async (req, res) => {
       });
 
       const newUser = await user.save();
-      const token = createToken({
-        userId: newUser._id,
-        username: newUser.username,
+      const accessToken = createAccessToken({
+        userId: user._id,
+        username: user.username,
       });
 
-      res.status(201).json(token);
+      const refreshToken = createRefreshToken({
+        userId: user._id,
+        username: user.username,
+      });
+
+      res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: "None",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+      });
+
+      res.status(201).json({ accessToken });
     }
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -86,15 +108,54 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Invalid password" });
     }
 
-    const token = createToken({
+    const accessToken = createAccessToken({
       userId: user._id,
       username: user.username,
     });
 
-    res.status(200).json(token);
+    const refreshToken = createRefreshToken({
+      userId: user._id,
+      username: user.username,
+    });
+
+    res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    res.status(200).json({ accessToken });
   } catch (err) {
     res.status(500).json({ message: "Internal server error" });
   }
+});
+
+router.post("/refresh-token", async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+  if (!refreshToken) return res.status(401).json({ message: "Unauthorized" });
+
+  try {
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    const accessToken = createAccessToken({
+      userId: decoded.userId,
+      username: decoded.username,
+    });
+
+    res.status(200).json({ accessToken });
+  } catch (err) {
+    res.status(403).json({ message: "Forbidden: Invalid refresh token" });
+  }
+});
+
+router.post("/logout", (req, res) => {
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+  });
+  res.clearCookie("username");
+  res.status(200).json({ message: "Logged out" });
 });
 
 router.post("/products", authenticate, async (req, res) => {
